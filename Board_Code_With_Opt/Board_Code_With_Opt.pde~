@@ -1,6 +1,6 @@
-//#include <WiFiShieldOrPmodWiFi.h>
+#include <WiFiShieldOrPmodWiFi.h>
 #include <DNETcK.h>
-//#include <DWIFIcK.h>
+#include <DWIFIcK.h>
 #include <pt.h>
 
 
@@ -14,31 +14,31 @@ IPv4 ipServer = {169,254,1,0};
 unsigned short portServer = DNETcK::iPersonalPorts44 + 400;
 
 //SSID
-//const char * szSsid = "BugWiFi";
+const char * szSsid = "BugWiFi";
 
 // select 1 for the security you want, or none for no security
 //#define USE_WPA2_PASSPHRASE
 //#define USE_WPA2_KEY
 
 // modify the security key to what you have.
-//#if defined(USE_WPA2_PASSPHRASE)
+#if defined(USE_WPA2_PASSPHRASE)
 
-//    const char * szPassPhrase = "BugWiFi";
-//    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, szPassPhrase, &status)
+    const char * szPassPhrase = "BugWiFi";
+    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, szPassPhrase, &status)
 
-//#elif defined(USE_WPA2_KEY)
+#elif defined(USE_WPA2_KEY)
 
-//    DWIFIcK::WPA2KEY key = { 0x27, 0x2C, 0x89, 0xCC, 0xE9, 0x56, 0x31, 0x1E, 
-//                            0x3B, 0xAD, 0x79, 0xF7, 0x1D, 0xC4, 0xB9, 0x05, 
-//                            0x7A, 0x34, 0x4C, 0x3E, 0xB5, 0xFA, 0x38, 0xC2, 
-//                            0x0F, 0x0A, 0xB0, 0x90, 0xDC, 0x62, 0xAD, 0x58 };
-//    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, key, &status)
+    DWIFIcK::WPA2KEY key = { 0x27, 0x2C, 0x89, 0xCC, 0xE9, 0x56, 0x31, 0x1E, 
+                            0x3B, 0xAD, 0x79, 0xF7, 0x1D, 0xC4, 0xB9, 0x05, 
+                            0x7A, 0x34, 0x4C, 0x3E, 0xB5, 0xFA, 0x38, 0xC2, 
+                            0x0F, 0x0A, 0xB0, 0x90, 0xDC, 0x62, 0xAD, 0x58 };
+    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, key, &status)
 
-//#else   // no security - OPEN
+#else   // no security - OPEN
 
-//    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, &status)
+    #define WiFiConnectMacro() DWIFIcK::connect(szSsid, &status)
 
-//#endif
+#endif
 //--------------------------------------------------------------------------------//
 //----------------------------End of WiFi Configuration---------------------------//
 //--------------------------------------------------------------------------------//
@@ -46,7 +46,7 @@ unsigned short portServer = DNETcK::iPersonalPorts44 + 400;
 
 
 //--------------------------------------------------------------------------------//
-//----------------------------Network Data Configuration--------------------------//
+//-----------------------------WiFi Data Configuration----------------------------//
 //--------------------------------------------------------------------------------//
 typedef enum
 {
@@ -81,7 +81,7 @@ int count = 0;
 
 DNETcK::STATUS status;
 //--------------------------------------------------------------------------------//
-//-------------------------End of Network data Configuration-------------------------//
+//-------------------------End of WiFi data Configuration-------------------------//
 //--------------------------------------------------------------------------------//
 
 
@@ -201,16 +201,16 @@ void setup(){
 	OPT_VAL=digitalRead(OPTICAL);
 	externalLED(OPT_VAL);
 	
-    //setup the network for the BUG
-//    int conID = DNETcK::INVALID_CONNECTION_ID;
-//    lightLED(1,0,0,0);
-//    if((conID = WiFiConnectMacro()) != DWIFIcK::INVALID_CONNECTION_ID){
-//        lightLED(0,1,0,0);
-//        state = INITIALIZE;
-//    }else{
-//        lightLED(1,1,0,0);
-//        state = EXIT;
-//    }
+    //setup the Wi-Fi for the BUG
+    int conID = DWIFIcK::INVALID_CONNECTION_ID;
+    lightLED(1,0,0,0);
+    if((conID = WiFiConnectMacro()) != DWIFIcK::INVALID_CONNECTION_ID){
+        lightLED(0,1,0,0);
+        state = INITIALIZE;
+    }else{
+        lightLED(1,1,0,0);
+        state = EXIT;
+    }
   
     // intialize the stack with a static IP
     DNETcK::begin(ipServer);
